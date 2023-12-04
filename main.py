@@ -43,7 +43,7 @@ def suppression_mots(dictionnaire: dict, listeparasites: list):
 import csv
 #On définit notre fonction
 def importcsv():
-    nomfichier = R"C:\Users\hugod\Documents\parasite.csv"
+    nomfichier = R"C:\Chemin\vers\parasite.csv"
     #On utlilise la fonction open pour ouvrir le fichier avec droits le lecture.
     with open(nomfichier, "r",) as fichiercsv:
         #On utlise l'import csv.reader pour lire le fichier depuis sa première ligne
