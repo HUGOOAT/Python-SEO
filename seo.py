@@ -69,17 +69,17 @@ class SEOAnalyser:
                 break
         return result
 
-    def GetUrlInterne(self, listeurl):
-        Nbinterne = len(listeurl['url_interne'])
-        return Nbinterne
+    def getUrlInterne(self, listeurl):
+        nbinterne = len(listeurl['url_interne'])
+        return nbinterne
 
-    def GetUrlExterne(self, listeurl):
-        Nbexterne = len(listeurl['url_externe'])
-        return Nbexterne
+    def getUrlExterne(self, listeurl):
+        nbexterne = len(listeurl['url_externe'])
+        return nbexterne
 
-    def CompteBalise(self, listebalise):
-        NbBalise = len(listebalise)
-        return NbBalise
+    def compteBalise(self, listebalise):
+        nbBalise = len(listebalise)
+        return nbBalise
 
     def analyse_seo(self):
         sortiehtml = self.export_html(self.url)
@@ -90,10 +90,10 @@ class SEOAnalyser:
         rootdomain = self.nomdomaine(self.url)
         urlspresentes = self.val_attribut(sortiehtml, "a", "href")
         comparatif = self.classedomaine(rootdomain, urlspresentes)
-        urlsinternes = self.GetUrlInterne(comparatif)
-        urlsexternes = self.GetUrlExterne(comparatif)
+        urlsinternes = self.getUrlInterne(comparatif)
+        urlsexternes = self.getUrlExterne(comparatif)
         balisesalt = self.val_attribut(sortiehtml, "img", "alt")
-        nombrebalise = self.CompteBalise(balisesalt)
+        nombrebalise = self.compteBalise(balisesalt)
 
         print("trois premiers mots clés:", troisPremiers)
         print("Nombre d'URL internes:", urlsinternes)
