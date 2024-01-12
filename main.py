@@ -31,18 +31,22 @@ class Gui:
         fenetre_resultats = tk.Toplevel(self.fenetre)
         resultats_interface = ResultatsGui(fenetre_resultats, self.resultats)
 
-
 class ResultatsGui:
+
     def __init__(self, fenetre, resultats):
         self.fenetre = fenetre
-        self.fenetre.title("Résultats de l'analyse")
+        self.fenetre.title("Résultats de l'analyse SEO")
 
         self.afficher_resultats(resultats)
 
     def afficher_resultats(self, resultats):
         for cle, valeur in resultats.items():
-            label = tk.Label(self.fenetre, text=f"{cle}: {valeur}")
-            label.pack()
+            label_cle = tk.Label(self.fenetre, text=f"{cle}:", width=50, anchor='w')
+            label_cle.grid(sticky='w')
+
+            entry = tk.Entry(self.fenetre, width=20)
+            entry.insert(tk.END, valeur)
+            entry.grid(sticky='w')
 
 if __name__ == "__main__":
     fenetre_principale = tk.Tk()
