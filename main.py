@@ -7,6 +7,7 @@ class Gui:
         self.fenetre = fenetre
         self.fenetre.title("Analyseur SEO")
         self.resultats = None
+        self.listeparasite = []
 
         self.url_label = tk.Label(fenetre, text="URL:")
         self.url_entry = tk.Entry(fenetre, width=100)
@@ -15,12 +16,14 @@ class Gui:
         self.mots_entry = tk.Entry(fenetre, width=100)
 
         self.bouton_analyse = tk.Button(fenetre, text="Analyser", command=self.lancer_analyse)
+        self.bouton_motparasite = tk.Button(fenetre, text="Consulter", command=self.get_listparasite)
 
         self.url_label.pack()
         self.url_entry.pack()
         self.mots_label.pack()
         self.mots_entry.pack()
         self.bouton_analyse.pack()
+        self.bouton_motparasite.pack()
 
     def lancer_analyse(self):
         url = self.url_entry.get()
@@ -30,6 +33,14 @@ class Gui:
         self.resultats = analyseur.analyse_seo()
         fenetre_resultats = tk.Toplevel(self.fenetre)
         resultats_interface = ResultatsGui(fenetre_resultats, self.resultats)
+
+    def get_listparasite(self):
+        url = "None"
+        motscles = None
+        liste = SEOAnalyser(url, motscles)
+        self.listeparasite = liste.get_motsparasites()
+        fenetre_listeparasite = tk.Toplevel(self.fenetre)
+        liste_interface = GuiList(fenetre_listeparasite, self.listeparasite)
 
 class ResultatsGui:
 
@@ -47,6 +58,20 @@ class ResultatsGui:
             entry = tk.Entry(self.fenetre, width=20)
             entry.insert(tk.END, valeur)
             entry.grid(sticky='w')
+
+class GuiList:
+    def __init__(self, fenetre, listeparasites):
+        self.fenetre = fenetre
+        self.fenetre.title("Modification des mots parasites")
+
+        self.list_label = tk.Label(fenetre, text="liste des mots clés:")
+
+        self.afficher_listeparasites(listeparasites)
+
+    def afficher_listeparasites(self, listeparasites):
+        entry = tk.Entry(self.fenetre, width=20)
+        entry.insert(tk.END, listeparasites)
+        entry.grid(sticky='w')
 
 if __name__ == "__main__":
     fenetre_principale = tk.Tk()
