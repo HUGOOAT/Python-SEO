@@ -62,9 +62,9 @@ class SEOAnalyser:
 
     def troismots(self, trimots):
         result = []
-        for index, (cle, valeur) in enumerate(trimots.items()):
+        for index, (mot, occurence) in enumerate(trimots.items()):
             if index < 3:
-                result.append((cle, valeur))
+                result.append((mot))
             else:
                 break
         return result
@@ -81,12 +81,23 @@ class SEOAnalyser:
         nbBalise = len(listebalise)
         return nbBalise
 
+    def comparateurmots(self, troismots):
+        identique = 0
+        for motcle in self.motscles:
+            if motcle in troismots:
+                identique = identique + 1
+        if identique == 3:
+            return True
+        else:
+            return False
+
     def analyse_seo(self):
         sortiehtml = self.export_html(self.url)
         htmltotext = self.removehtml(sortiehtml)
         motscles = self.occurence_mots(htmltotext)
         trimots = self.suppression_mots(motscles)
         troisPremiers = self.troismots(trimots)
+        comparaison = self.comparateurmots(troisPremiers)
         rootdomain = self.nomdomaine(self.url)
         urlspresentes = self.val_attribut(sortiehtml, "a", "href")
         comparatif = self.classedomaine(rootdomain, urlspresentes)
@@ -99,6 +110,7 @@ class SEOAnalyser:
         print("Nombre d'URL internes:", urlsinternes)
         print("Nombre d'URL externes:", urlsexternes)
         print("Nombre de balises alt:", nombrebalise)
+        print("Resultat de la comparaison:", comparaison)
 
 analyse1 = SEOAnalyser("https://www.nike.com/fr/homme")
 analyse1.analyse_seo()
