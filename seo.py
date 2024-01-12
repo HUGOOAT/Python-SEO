@@ -112,5 +112,10 @@ class SEOAnalyser:
         print("Nombre de balises alt:", nombrebalise)
         print("Resultat de la comparaison:", comparaison)
 
-analyse1 = SEOAnalyser("https://www.nike.com/fr/homme")
-analyse1.analyse_seo()
+        return {
+            "mots_cles": troisPremiers,
+            "liens_internes": urlsinternes,
+            "liens_externes": urlsexternes,
+            "balises_alt": nombrebalise,
+            "comparaison": comparaison
+        }
