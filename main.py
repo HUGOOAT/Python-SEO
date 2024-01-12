@@ -9,10 +9,10 @@ class Gui:
         self.resultats = None
 
         self.url_label = tk.Label(fenetre, text="URL:")
-        self.url_entry = tk.Entry(fenetre, width=30)
+        self.url_entry = tk.Entry(fenetre, width=100)
 
         self.mots_label = tk.Label(fenetre, text="Mots clés (séparés par des espaces):")
-        self.mots_entry = tk.Entry(fenetre, width=30)
+        self.mots_entry = tk.Entry(fenetre, width=100)
 
         self.bouton_analyse = tk.Button(fenetre, text="Analyser", command=self.lancer_analyse)
 
@@ -28,14 +28,21 @@ class Gui:
 
         analyseur = SEOAnalyser(url, motscles)
         self.resultats = analyseur.analyse_seo()
-        self.afficher_resultats()
+        fenetre_resultats = tk.Toplevel(self.fenetre)
+        resultats_interface = ResultatsGui(fenetre_resultats, self.resultats)
 
-    def afficher_resultats(self):
-        if self.resultats is not None:
-            messagebox.showinfo("Résultats", self.resultats)
-        else:
-            messagebox.showwarning("Avertissement", "Lancez d'abord l'analyse.")
 
+class ResultatsGui:
+    def __init__(self, fenetre, resultats):
+        self.fenetre = fenetre
+        self.fenetre.title("Résultats de l'analyse")
+
+        self.afficher_resultats(resultats)
+
+    def afficher_resultats(self, resultats):
+        for cle, valeur in resultats.items():
+            label = tk.Label(self.fenetre, text=f"{cle}: {valeur}")
+            label.pack()
 
 if __name__ == "__main__":
     fenetre_principale = tk.Tk()
