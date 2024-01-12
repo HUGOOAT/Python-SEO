@@ -28,6 +28,11 @@ class SEOAnalyser:
             lecturecsv = csv.reader(fichiercsv)
             for row in lecturecsv:
                 self.motsparasites.append(row[0])
+        return self.motsparasites
+
+    def add_parasite(self, mot):
+        if mot.lower not in self.motsparasites:
+            self.motsparasites.append(mot)
 
     def removehtml(self, html):
         soup = BeautifulSoup(html, "html.parser")
@@ -127,7 +132,7 @@ class SEOAnalyser:
         print("Nombre d'URL externes:", urlsexternes)
         print("Nombre de balises alt:", nombrebalise)
         print("Nombre d'images:", nbreimg)
-        print("Pourcentage de image/alt", pourcentage)
+        print("Pourcentage de image/alt:", pourcentage)
         print("Resultat de la comparaison:", comparaison)
 
         return {
