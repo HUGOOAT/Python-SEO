@@ -40,6 +40,11 @@ class SEOAnalyser:
         valeur = [balise.get(nom_attribut) for balise in balises if balise.has_attr(nom_attribut)]
         return valeur
 
+    def nombreimg(self, html, nom_balise):
+        soup = BeautifulSoup(html, "html.parser")
+        balises = len(soup.find_all(nom_balise))
+        return balises
+
     def nomdomaine(self, url):
         urlcomplet = urlparse(url)
         nom_domaine = urlcomplet.netloc
@@ -87,9 +92,17 @@ class SEOAnalyser:
             if motcle in troismots:
                 identique = identique + 1
         if identique == 3:
-            return True
+            return "Oui"
         else:
-            return False
+            return "Non"
+
+    def pourcentagealt(self, nombre_image, nombre_alt):
+        if nombre_image == 0:
+            return 0
+        pourcentage = round((nombre_alt / nombre_image) * 100)
+        pourcentage = str(pourcentage)
+        pourcentage = pourcentage + "%"
+        return pourcentage
 
     def analyse_seo(self):
         sortiehtml = self.export_html(self.url)
@@ -104,18 +117,23 @@ class SEOAnalyser:
         urlsinternes = self.getUrlInterne(comparatif)
         urlsexternes = self.getUrlExterne(comparatif)
         balisesalt = self.val_attribut(sortiehtml, "img", "alt")
+        nbreimg = self.nombreimg(sortiehtml, "img")
         nombrebalise = self.compteBalise(balisesalt)
+        pourcentage = self.pourcentagealt(nbreimg, nombrebalise)
 
+        #Les prints ci-dessous sont laissés pour démontrer le fonctionnement du programme hors GUI
         print("trois premiers mots clés:", troisPremiers)
         print("Nombre d'URL internes:", urlsinternes)
         print("Nombre d'URL externes:", urlsexternes)
         print("Nombre de balises alt:", nombrebalise)
+        print("Nombre d'images:", nbreimg)
+        print("Pourcentage de image/alt", pourcentage)
         print("Resultat de la comparaison:", comparaison)
 
         return {
-            "mots_cles": troisPremiers,
-            "liens_internes": urlsinternes,
-            "liens_externes": urlsexternes,
-            "balises_alt": nombrebalise,
-            "comparaison": comparaison
+            "Trois mots les plus présents sur la page": troisPremiers,
+            "Les 3 mots sont parmis vos mots renseignés": comparaison,
+            "Nombre de liens internes sur la page": urlsinternes,
+            "Nombre de liens externes sur la page": urlsexternes,
+            "% de présence de balise alt pour balise img": pourcentage
         }
