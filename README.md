@@ -9,4 +9,5 @@ Requests:
 pip install requests 
 
 /!\
-Le répertoire dans lequel se situe le fichier CSV "parasite.csv" est à modifier dans la variable "nomfichier" ligne 46.
+Le fichier CSV doit être positionné dans le même dossier que les fichiers main.py et seo.py.
+Si vous choissisez d'exporter les résultats , le fichier resultat.txt sera crée dans ce même répertoire.
