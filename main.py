@@ -40,6 +40,7 @@ class Gui:
         motscles = None
         liste = SEOAnalyser(url, motscles)
         self.listeparasite = liste.get_motsparasites()
+        return self.listeparasite
 
     def afficher_liste(self):
         fenetre_listeparasite = tk.Toplevel(self.fenetre)
