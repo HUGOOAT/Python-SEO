@@ -22,7 +22,7 @@ class SEOAnalyser:
         return dictionnaire
 
     def get_motsparasites(self):
-        nomfichier = R"C:\Users\hugod\Documents\parasite.csv"
+        nomfichier = "parasite.csv"
         with open(nomfichier, "r",) as fichiercsv:
             lecturecsv = csv.reader(fichiercsv)
             for row in lecturecsv:
