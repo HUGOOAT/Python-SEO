@@ -8,6 +8,7 @@ class Gui:
         self.fenetre.title("Analyseur SEO")
         self.resultats = None
         self.listeparasite = []
+        self.get_listparasite()
 
         self.url_label = tk.Label(fenetre, text="URL:")
         self.url_entry = tk.Entry(fenetre, width=100)
@@ -16,7 +17,7 @@ class Gui:
         self.mots_entry = tk.Entry(fenetre, width=100)
 
         self.bouton_analyse = tk.Button(fenetre, text="Analyser", command=self.lancer_analyse)
-        self.bouton_motparasite = tk.Button(fenetre, text="Consulter", command=self.get_listparasite)
+        self.bouton_motparasite = tk.Button(fenetre, text="Paramètres", command=self.afficher_liste)
 
         self.url_label.pack()
         self.url_entry.pack()
@@ -39,8 +40,13 @@ class Gui:
         motscles = None
         liste = SEOAnalyser(url, motscles)
         self.listeparasite = liste.get_motsparasites()
+
+    def afficher_liste(self):
         fenetre_listeparasite = tk.Toplevel(self.fenetre)
-        liste_interface = GuiList(fenetre_listeparasite, self.listeparasite)
+        liste_interface = GuiList(fenetre_listeparasite, self.listeparasite, self)
+
+    def update_listeparasite(self, new_listeparasite):
+        self.listeparasite = new_listeparasite
 
 class ResultatsGui:
 
@@ -60,11 +66,13 @@ class ResultatsGui:
             entry.grid(sticky='w')
 
 class GuiList:
-    def __init__(self, fenetre, listeparasites):
+    def __init__(self, fenetre, listeparasites, gui_instance):
         self.fenetre = fenetre
+        self.listeparasites = listeparasites
+        self.gui_instance = gui_instance
         self.fenetre.title("Modification des mots parasites")
 
-        self.listbox = tk.Listbox(fenetre, width=50, height=10)
+        self.listbox = tk.Listbox(fenetre, width=70, height=10)
         self.listbox.pack(padx=10, pady=10)
 
         self.afficher_listeparasites(listeparasites)
@@ -75,15 +83,24 @@ class GuiList:
         self.bouton_ajouter_mot = tk.Button(fenetre, text="Ajouter un mot", command=self.ajouter_mot)
         self.bouton_ajouter_mot.pack(pady=10)
 
+        self.fenetre.protocol("WM_DELETE_WINDOW", self.on_close)
     def afficher_listeparasites(self, listeparasites):
         for mot in listeparasites:
             self.listbox.insert(tk.END, mot)
 
     def ajouter_mot(self):
         nouveau_mot = self.entry_mot.get()
-        if nouveau_mot:
+        if nouveau_mot not in self.listeparasites:
             self.listbox.insert(tk.END, nouveau_mot)
             self.entry_mot.delete(0, tk.END)  # Effacer le texte après l'ajout
+            self.listeparasites.append(nouveau_mot)
+            self.gui_instance.update_listeparasite(self.listeparasites)
+        else:
+            messagebox.showinfo("Mot déjà présent", "Le mot est déjà dans la liste.")
+
+    def on_close(self):
+        self.gui_instance.update_listeparasite(self.listeparasites)
+        self.fenetre.destroy()
 
 if __name__ == "__main__":
     fenetre_principale = tk.Tk()
