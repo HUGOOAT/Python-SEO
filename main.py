@@ -62,7 +62,7 @@ class ResultatsGui:
         self.afficher_resultats(resultats)
 
         self.bouton_exporter = tk.Button(fenetre, text="Exporter les résultats en txt", command=self.exporter_resultats)
-        self.bouton_exporter.pack(pady=10)
+        self.bouton_exporter.grid(row=11, column=0, pady=10)
 
     def afficher_resultats(self, resultats):
         for cle, valeur in resultats.items():
@@ -79,7 +79,7 @@ class ResultatsGui:
             for cle, valeur in self.resulats.items():
                 ligne = f"{cle}: {valeur}\n"
                 fichier.write(ligne)
-        messagebox.showinfo("Exportation réussie," f"Les résultats ont été exportés dans {nom_fichier}.")
+        messagebox.showinfo("Exportation réussie", f"Les résultats ont été exportés dans {nom_fichier}.")
 
 class GuiList:
     def __init__(self, fenetre, listeparasites, gui_instance):
