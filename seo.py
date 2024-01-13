@@ -5,11 +5,10 @@ from urllib.parse import urlparse
 import requests
 
 class SEOAnalyser:
-    def __init__(self, url: str, motscles = []):
+    def __init__(self, url: str, motscles = [], motsparasites = []):
         self.url = url
         self.motscles = motscles
-        self.motsparasites = []
-        self.get_motsparasites()
+        self.motsparasites = motsparasites
 
     def occurence_mots(self, texte):
         mot = texte.lower().split()
@@ -23,7 +22,7 @@ class SEOAnalyser:
         return dictionnaire
 
     def get_motsparasites(self):
-        nomfichier = R"C:\Users\Administrateur\Documents\parasite.csv"
+        nomfichier = R"C:\Users\hugod\Documents\parasite.csv"
         with open(nomfichier, "r",) as fichiercsv:
             lecturecsv = csv.reader(fichiercsv)
             for row in lecturecsv:
