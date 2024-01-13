@@ -10,7 +10,7 @@ class Gui:
         self.listeparasite = []
         self.get_listparasite()
 
-        self.url_label = tk.Label(fenetre, text="URL:")
+        self.url_label = tk.Label(fenetre, text="URL au format https://www...")
         self.url_entry = tk.Entry(fenetre, width=100)
 
         self.mots_label = tk.Label(fenetre, text="Mots clés (séparés par des espaces):")
@@ -28,12 +28,15 @@ class Gui:
 
     def lancer_analyse(self):
         url = self.url_entry.get()
-        motscles = self.mots_entry.get().split(' ')
+        if url == "":
+            messagebox.showinfo("Champ URL vide", "Merci de renseigner votre URL")
+        else:
+            motscles = self.mots_entry.get().split(' ')
 
-        analyseur = SEOAnalyser(url, motscles)
-        self.resultats = analyseur.analyse_seo()
-        fenetre_resultats = tk.Toplevel(self.fenetre)
-        resultats_interface = ResultatsGui(fenetre_resultats, self.resultats)
+            analyseur = SEOAnalyser(url, motscles)
+            self.resultats = analyseur.analyse_seo()
+            fenetre_resultats = tk.Toplevel(self.fenetre)
+            resultats_interface = ResultatsGui(fenetre_resultats, self.resultats)
 
     def get_listparasite(self):
         url = "None"
@@ -55,7 +58,11 @@ class ResultatsGui:
         self.fenetre = fenetre
         self.fenetre.title("Résultats de l'analyse SEO")
 
+        self.resulats = resultats
         self.afficher_resultats(resultats)
+
+        self.bouton_exporter = tk.Button(fenetre, text="Exporter les résultats en txt", command=self.exporter_resultats)
+        self.bouton_exporter.pack(pady=10)
 
     def afficher_resultats(self, resultats):
         for cle, valeur in resultats.items():
@@ -65,6 +72,14 @@ class ResultatsGui:
             entry = tk.Entry(self.fenetre, width=20)
             entry.insert(tk.END, valeur)
             entry.grid(sticky='w')
+
+    def exporter_resultats(self):
+        nom_fichier="resultats.txt"
+        with open(nom_fichier, "w") as fichier:
+            for cle, valeur in self.resulats.items():
+                ligne = f"{cle}: {valeur}\n"
+                fichier.write(ligne)
+        messagebox.showinfo("Exportation réussie," f"Les résultats ont été exportés dans {nom_fichier}.")
 
 class GuiList:
     def __init__(self, fenetre, listeparasites, gui_instance):
@@ -97,7 +112,7 @@ class GuiList:
             self.listeparasites.append(nouveau_mot)
             self.gui_instance.update_listeparasite(self.listeparasites)
         else:
-            messagebox.showinfo("Mot déjà présent", "Le mot est déjà dans la liste.")
+            messagebox.showinfo("Mot déjà présent", f"""Le mot "{nouveau_mot}" est déjà dans la liste.""")
 
     def on_close(self):
         self.gui_instance.update_listeparasite(self.listeparasites)
