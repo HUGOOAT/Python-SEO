@@ -64,14 +64,26 @@ class GuiList:
         self.fenetre = fenetre
         self.fenetre.title("Modification des mots parasites")
 
-        self.list_label = tk.Label(fenetre, text="liste des mots clés:")
+        self.listbox = tk.Listbox(fenetre, width=50, height=10)
+        self.listbox.pack(padx=10, pady=10)
 
         self.afficher_listeparasites(listeparasites)
 
+        self.entry_mot = tk.Entry(fenetre, width=30)
+        self.entry_mot.pack(pady=5)
+
+        self.bouton_ajouter_mot = tk.Button(fenetre, text="Ajouter un mot", command=self.ajouter_mot)
+        self.bouton_ajouter_mot.pack(pady=10)
+
     def afficher_listeparasites(self, listeparasites):
-        entry = tk.Entry(self.fenetre, width=20)
-        entry.insert(tk.END, listeparasites)
-        entry.grid(sticky='w')
+        for mot in listeparasites:
+            self.listbox.insert(tk.END, mot)
+
+    def ajouter_mot(self):
+        nouveau_mot = self.entry_mot.get()
+        if nouveau_mot:
+            self.listbox.insert(tk.END, nouveau_mot)
+            self.entry_mot.delete(0, tk.END)  # Effacer le texte après l'ajout
 
 if __name__ == "__main__":
     fenetre_principale = tk.Tk()
